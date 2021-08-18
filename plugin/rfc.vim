@@ -11,8 +11,13 @@ let g:loaded_rfc = 1
 " 'RFC <number>' open the requested RFC number in a new window
 function! RFC(number)
   if a:number =~ '^[0-9]'
-    " fetch the rfc file
-    silent exe ":e https://www.ietf.org/rfc/rfc" . a:number . ".txt"
+    if filereadable("/usr/share/doc/rfc/txt/rfc" . a:number . ".txt")
+        " if the RFC is downloaded, use the downloaded file
+        silent exe ":e /usr/share/doc/rfc/txt/rfc" . a:number . ".txt"
+    else
+        " else fetch the rfc file
+        silent exe ":e https://www.ietf.org/rfc/rfc" . a:number . ".txt"
+    endif
 
     " set syntax on the rfc txt file
     setf rfc
